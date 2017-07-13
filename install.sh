@@ -1,5 +1,7 @@
 #!/bin/bash
 
+U=$(who am i | awk '{print $1}')
+
 echo -e "\n\r\e[32mRemoving apache\e[0m"
 apt -qq remove apache2 --purge -y 
 
@@ -31,7 +33,7 @@ apt -qq install -y nginx php7.1 php7.1-cli php7.1-dev php7.1-pgsql php7.1-sqlite
 
 curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/local/bin/composer
-printf "\nPATH=\"$(sudo su - vagrant -c 'composer config -g home 2>/dev/null')/vendor/bin:\$PATH\"\n" | tee -a /home/vagrant/.profile
+printf "\nPATH=\"$(sudo su - ${U} -c 'composer config -g home 2>/dev/null')/vendor/bin:\$PATH\"\n" | tee -a /home/${U}/.profile
 
 echo -e "\n\r\e[32mConfiguring PHP 7.1\e[0m"
 sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php/7.1/fpm/php.ini
@@ -41,23 +43,21 @@ sed -i "s/memory_limit = .*/memory_limit = 512M/" /etc/php/7.1/fpm/php.ini
 sed -i "s/upload_max_filesize = .*/upload_max_filesize = 100M/" /etc/php/7.1/fpm/php.ini
 sed -i "s/post_max_size = .*/post_max_size = 100M/" /etc/php/7.1/fpm/php.ini
 sed -i "s/;date.timezone.*/date.timezone = UTC/" /etc/php/7.1/fpm/php.ini
-sed -i "s/user www-data;/user vagrant;/" /etc/nginx/nginx.conf
+sed -i "s/user www-data;/user ${U};/" /etc/nginx/nginx.conf
 sed -i "s/# server_names_hash_bucket_size.*/server_names_hash_bucket_size 64;/" /etc/nginx/nginx.conf
-sed -i "s/user = www-data/user = vagrant/" /etc/php/7.1/fpm/pool.d/www.conf
-sed -i "s/group = www-data/group = vagrant/" /etc/php/7.1/fpm/pool.d/www.conf
-sed -i "s/listen\.owner.*/listen.owner = vagrant/" /etc/php/7.1/fpm/pool.d/www.conf
-sed -i "s/listen\.group.*/listen.group = vagrant/" /etc/php/7.1/fpm/pool.d/www.conf
+sed -i "s/user = www-data/user = ${U}/" /etc/php/7.1/fpm/pool.d/www.conf
+sed -i "s/group = www-data/group = ${U}/" /etc/php/7.1/fpm/pool.d/www.conf
+sed -i "s/listen\.owner.*/listen.owner = ${U}/" /etc/php/7.1/fpm/pool.d/www.conf
+sed -i "s/listen\.group.*/listen.group = ${U}/" /etc/php/7.1/fpm/pool.d/www.conf
 sed -i "s/;listen\.mode.*/listen.mode = 0666/" /etc/php/7.1/fpm/pool.d/www.conf
 
 echo -e "\n\r\e[32mUpdating system services\e[0m"
 service nginx restart
 service php7.1-fpm restart
-usermod -a -G www-data vagrant
+usermod -a -G www-data ${U}
 
 sed -i "s/#START=yes/START=yes/" /etc/default/beanstalkd
 /etc/init.d/beanstalkd start
-
-chown -R $USER:$(id -gn $USER) /home/vagrant/.config
 
 echo -e "\n\r\e[32mInstalling some Node.js packages\e[0m"
 npm i -g yarn nodemon laravel-echo-server &> /dev/null
@@ -66,25 +66,25 @@ mysql -uroot -psecret -e "CREATE DATABASE reactivegaming;"
 
 cat > /etc/supervisor/conf.d/echoserver.conf << EOF
 [program:echoserver]
-directory=/home/vagrant/web/reactivegaming
+directory=/home/${U}/web/reactivegaming
 command=/usr/bin/laravel-echo-server start
 autostart=true
 autorestart=true
-user=vagrant
+user=${U}
 redirect_stderr=true
-stdout_logfile=/home/vagrant/web/reactivegaming/storage/logs/%(program_name)s.log
+stdout_logfile=/home/${U}/web/reactivegaming/storage/logs/%(program_name)s.log
 EOF
 
 cat > /etc/supervisor/conf.d/events.conf << EOF
 [program:events]
 process_name=%(program_name)s_%(process_num)02d
-command=php /home/vagrant/web/reactivegaming/artisan queue:work beanstalkd --sleep=3 --tries=5
+command=php /home/${U}/web/reactivegaming/artisan queue:work beanstalkd --sleep=3 --tries=5
 autostart=true
 autorestart=true
-user=vagrant
+user=${U}
 numprocs=1
 redirect_stderr=true
-stdout_logfile=/home/vagrant/web/reactivegaming/storage/logs/%(program_name)s.log
+stdout_logfile=/home/${U}/web/reactivegaming/storage/logs/%(program_name)s.log
 EOF
 
 echo -e "\e[32mNOTE: Two supervisord configs have been created at:\e[0m\n"
@@ -92,7 +92,7 @@ echo -e "  /etc/supervisor/conf.d/echoserver.conf"
 echo -e "  /etc/supervisor/conf.d/events.conf\n\r"
 echo -e "These files enable a WebSockets listen server and event queue"
 echo -e "for the Reactive Gaming website. The website is expected to "
-echo -e "reside at /home/vagrant/web/reactivegaming. If this is not the"
+echo -e "reside at /home/${U}/web/reactivegaming. If this is not the"
 echo -e "case, please edit the configs and configure the proper path.\n\r”
 
 echo -e "\n\r\e[32mCleaning up...\e[0m"
