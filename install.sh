@@ -1,12 +1,12 @@
 #!/bin/bash
 
 echo -e "\n\r\e[32mRemoving apache\e[0m"
-apt remove apache2 --purge -y > /dev/null
+apt -qq remove apache2 --purge -y 
 
 echo -e "\n\r\e[32mUpdating and upgrading packages...\e[0m"
-apt autoremove -y > /dev/null
-apt update -y > /dev/null
-apt -q upgrade -y
+apt -qq autoremove -y 
+apt -qq update -y 
+apt -qq upgrade -y
 
 echo -e "\n\r\e[32mInstalling first batch of packages...\e[0m"
 
