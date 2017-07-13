@@ -7,7 +7,7 @@ apt upgrade -y &> /dev/null
 
 echo "deb http://www.apache.org/dist/cassandra/debian 311x main" | tee -a /etc/apt/sources.list.d/cassandra.sources.list
 
-apt install -y build-essential dos2unix gcc git libmcrypt4 libpcre3-dev ntp unzip software-properties-common curl make python2.7-dev python-pip re2c supervisor unattended-upgrades whois vim libnotify-bin pv cifs-utils
+apt install -y build-essential dos2unix gcc git libmcrypt4 libpcre3-dev ntp unzip software-properties-common curl make python2.7-dev python-pip re2c supervisor unattended-upgrades whois vim libnotify-bin pv cifs-utils zsh
 
 curl https://www.apache.org/dist/cassandra/KEYS | apt-key add -
 
@@ -81,11 +81,14 @@ echo -e "  /etc/supervisor/conf.d/events.conf\n\r"
 echo -e "These files enable a WebSockets listen server and event queue"
 echo -e "for the Reactive Gaming website. The website is expected to "
 echo -e "reside at /home/vagrant/web/reactivegaming. If this is not the"
-echo -e "case, please edit the configs and configure the proper path.
+echo -e "case, please edit the configs and configure the proper path.\n\r”
 
 systemctl enable supervisor.service
 service supervisor start
 supervisorctl reread && supervisorctl update && supervisorctl start all
-apt -y update -y && apt -y upgrade && apt -y autoremove && apt -y clean
+apt -y update &> /dev/null
+apt -y upgrade &> /dev/null
+apt -y autoremove &> /dev/null
+apt -y clean &> /dev/null
 
 git clone https://github.com/nathanburgess/dotfiles ~/dotfiles && cd ~/dotfiles && ./install.sh && cd && rm -fR ~/dotfiles
