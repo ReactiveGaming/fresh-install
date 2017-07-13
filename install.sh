@@ -1,5 +1,6 @@
 #!/bin/bash
 
+rm -f /etc/apt/sources.list.d/cassandra.sources.list
 U=$(who am i | awk '{print $1}')
 
 echo -e "\n\r\e[32mRemoving apache\e[0m"
@@ -60,7 +61,7 @@ sed -i "s/#START=yes/START=yes/" /etc/default/beanstalkd
 /etc/init.d/beanstalkd start
 
 echo -e "\n\r\e[32mInstalling some Node.js packages\e[0m"
-npm i -g yarn nodemon laravel-echo-server &> /dev/null
+npm i -g yarn nodemon laravel-echo-server 
 
 mysql -uroot -psecret -e "CREATE DATABASE reactivegaming;"
 
@@ -87,13 +88,15 @@ redirect_stderr=true
 stdout_logfile=/home/${U}/web/reactivegaming/storage/logs/%(program_name)s.log
 EOF
 
+chown -R $U:$(id -gn $U) /home/${U}/.config
+
 echo -e "\e[32mNOTE: Two supervisord configs have been created at:\e[0m\n"
 echo -e "  /etc/supervisor/conf.d/echoserver.conf"
 echo -e "  /etc/supervisor/conf.d/events.conf\n\r"
 echo -e "These files enable a WebSockets listen server and event queue"
 echo -e "for the Reactive Gaming website. The website is expected to "
 echo -e "reside at /home/${U}/web/reactivegaming. If this is not the"
-echo -e "case, please edit the configs and configure the proper path.\n\r”
+echo -e "case, please edit the configs and configure the proper path.\n\r"
 
 echo -e "\n\r\e[32mCleaning up...\e[0m"
 systemctl enable supervisor.service
