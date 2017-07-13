@@ -64,6 +64,7 @@ usermod -a -G www-data ${U}
 sed -i "s/#START=yes/START=yes/" /etc/default/beanstalkd
 /etc/init.d/beanstalkd start
 
+mkdir /home/${U}/.config
 chown -R $U:$(id -gn $U) /home/${U}/.config
 
 echo -e "\n\r\e[32mInstalling some Node.js packages\e[0m"
