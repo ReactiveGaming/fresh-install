@@ -1,9 +1,14 @@
 #!/bin/bash
 
+echo -e "\n\r\e[32mRemoving apache\e[0m"
 apt remove apache2 --purge -y &> /dev/null
+
+echo -e "\n\r\e[32mUpdating and upgrading packages...\e[0m"
 apt autoremove -y  &> /dev/null
 apt update -y  &> /dev/null
 apt upgrade -y &> /dev/null
+
+echo -e "\n\r\e[32mInstalling first batch of packages...\e[0m"
 
 echo "deb http://www.apache.org/dist/cassandra/debian 311x main" | tee -a /etc/apt/sources.list.d/cassandra.sources.list
 
@@ -11,20 +16,24 @@ apt install -y build-essential dos2unix gcc git libmcrypt4 libpcre3-dev ntp unzi
 
 curl https://www.apache.org/dist/cassandra/KEYS | apt-key add -
 
+echo -e "\n\r\e[32mUpdating sources\e[0m"
 add-apt-repository ppa:ondrej/php -y &> /dev/null 
 apt-add-repository ppa:nginx/development -y &> /dev/null
 apt-add-repository ppa:chris-lea/redis-server -y &> /dev/null
 
 curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash - &> /dev/null
 
+echo -e "\n\r\e[32mInstalling second batch of packages...\e[0m"
 apt install -y nodejs libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++ libsodium-dev redis-server memcached beanstalkd mysql-server-5.7 cassandra
 
+echo -e "\n\r\e[32mInstalling final batch of packages...\e[0m"
 apt install -y nginx php7.1 php7.1-cli php7.1-dev php7.1-pgsql php7.1-sqlite3 php7.1-gd php7.1-curl php7.1-memcached php7.1-imap php7.1-mysql php7.1-mbstring php7.1-xml php7.1-zip php7.1-bcmath php7.1-soap php7.1-intl php7.1-readline php7.1-fpm
 
 curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/local/bin/composer
 printf "\nPATH=\"$(sudo su - vagrant -c 'composer config -g home 2>/dev/null')/vendor/bin:\$PATH\"\n" | tee -a /home/vagrant/.profile
 
+echo -e "\n\r\e[32mConfiguring PHP 7.1\e[0m"
 sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php/7.1/fpm/php.ini
 sed -i "s/display_errors = .*/display_errors = On/" /etc/php/7.1/fpm/php.ini
 sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/7.1/fpm/php.ini
@@ -40,6 +49,7 @@ sed -i "s/listen\.owner.*/listen.owner = vagrant/" /etc/php/7.1/fpm/pool.d/www.c
 sed -i "s/listen\.group.*/listen.group = vagrant/" /etc/php/7.1/fpm/pool.d/www.conf
 sed -i "s/;listen\.mode.*/listen.mode = 0666/" /etc/php/7.1/fpm/pool.d/www.conf
 
+echo -e "\n\r\e[32mUpdating system services\e[0m"
 service nginx restart
 service php7.1-fpm restart
 usermod -a -G www-data vagrant
@@ -48,7 +58,9 @@ sed -i "s/#START=yes/START=yes/" /etc/default/beanstalkd
 /etc/init.d/beanstalkd start
 
 chown -R $USER:$(id -gn $USER) /home/vagrant/.config
-npm i -g yarn nodemon laravel-echo-server
+
+echo -e "\n\r\e[32mInstalling some Node.js packages\e[0m"
+npm i -g yarn nodemon laravel-echo-server &> /dev/null
 
 mysql -uroot -psecret -e "CREATE DATABASE reactivegaming;"
 
@@ -83,6 +95,7 @@ echo -e "for the Reactive Gaming website. The website is expected to "
 echo -e "reside at /home/vagrant/web/reactivegaming. If this is not the"
 echo -e "case, please edit the configs and configure the proper path.\n\r”
 
+echo -e "\n\r\e[32mCleaning up...\e[0m"
 systemctl enable supervisor.service
 service supervisor start
 supervisorctl reread && supervisorctl update && supervisorctl start all
