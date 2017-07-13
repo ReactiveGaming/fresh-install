@@ -64,14 +64,6 @@ usermod -a -G www-data ${U}
 sed -i "s/#START=yes/START=yes/" /etc/default/beanstalkd
 /etc/init.d/beanstalkd start
 
-mkdir /home/${U}/.config
-chown -R $U:$(id -gn $U) /home/${U}/.config
-
-echo -e "\n\r\e[32mInstalling some Node.js packages\e[0m"
-#su vagrant << 'EOF'
-/usr/bin/npm i -g yarn nodemon laravel-echo-server 
-#EOF
-
 mysql -uroot -psecret -e "CREATE DATABASE reactivegaming;"
 
 cat > /etc/supervisor/conf.d/echoserver.conf << EOF
@@ -115,3 +107,10 @@ apt -y autoremove &> /dev/null
 apt -y clean &> /dev/null
 
 git clone https://github.com/nathanburgess/dotfiles ~/dotfiles && cd ~/dotfiles && ./install.sh && cd && rm -fR ~/dotfiles
+
+mkdir /home/${U}/.config
+chown -R $U:$(id -gn $U) /home/${U}/.config
+echo -e "\n\r\e[32mInstalling some Node.js packages\e[0m"
+su vagrant << 'EOF'
+sudo /usr/bin/npm i -g yarn nodemon laravel-echo-server 
+EOF
