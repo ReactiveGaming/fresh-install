@@ -60,6 +60,8 @@ usermod -a -G www-data ${U}
 sed -i "s/#START=yes/START=yes/" /etc/default/beanstalkd
 /etc/init.d/beanstalkd start
 
+chown -R $U:$(id -gn $U) /home/${U}/.config
+
 echo -e "\n\r\e[32mInstalling some Node.js packages\e[0m"
 npm i -g yarn nodemon laravel-echo-server 
 
@@ -87,8 +89,6 @@ numprocs=1
 redirect_stderr=true
 stdout_logfile=/home/${U}/web/reactivegaming/storage/logs/%(program_name)s.log
 EOF
-
-chown -R $U:$(id -gn $U) /home/${U}/.config
 
 echo -e "\e[32mNOTE: Two supervisord configs have been created at:\e[0m\n"
 echo -e "  /etc/supervisor/conf.d/echoserver.conf"
