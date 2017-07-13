@@ -1,7 +1,11 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-rm -f /etc/apt/sources.list.d/cassandra.sources.list
+export DEBIAN_FRONTEND=noninteractive
+
 U=$(who am i | awk '{print $1}')
+rm -f /etc/apt/sources.list.d/cassandra.sources.list
+debconf-set-selections <<< "mysql-server mysql-server/root_password password secret"
+debconf-set-selections <<< "mysql-server mysql-server/root_password_again password secret"
 
 echo -e "\n\r\e[32mRemoving apache\e[0m"
 apt -qq remove apache2 --purge -y 
