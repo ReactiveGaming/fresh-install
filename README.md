@@ -1,5 +1,6 @@
 # Installation
-`git clone https://github.com/ReactiveGaming/fresh-install ~/fresh && sudo ~/fresh/install.sh && rm -fR ~/fresh`  
+`git clone https://github.com/ReactiveGaming/fresh-install ~/fresh`  
+`sudo ~/fresh/install.sh && rm -fR ~/fresh`  
 `sudo npm i -g yarn nodemon laravel-echo-server`
 
 # What does this do?
