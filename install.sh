@@ -68,7 +68,9 @@ mkdir /home/${U}/.config
 chown -R $U:$(id -gn $U) /home/${U}/.config
 
 echo -e "\n\r\e[32mInstalling some Node.js packages\e[0m"
-npm i -g yarn nodemon laravel-echo-server 
+su vagrant << 'EOF'
+/usr/bin/npm i -g yarn nodemon laravel-echo-server 
+EOF
 
 mysql -uroot -psecret -e "CREATE DATABASE reactivegaming;"
 
