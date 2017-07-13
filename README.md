@@ -1,5 +1,5 @@
 # Installation
-`git clone https://github.com/ReactiveGaming/fresh-install ~/fresh && sudo ~/fresh/install.sh && rm -fR ~/fresh && npm i -g yarn nodemon laravel-echo-server`
+`git clone https://github.com/ReactiveGaming/fresh-install ~/fresh && sudo ~/fresh/install.sh && rm -fR ~/fresh && sudo npm i -g yarn nodemon laravel-echo-server`
 
 # What does this do?
 This script will configure a development environment (intended for Ubuntu 16.04) geared toward web development. More specifcally, this creates a machine that's ready to develop for Reactive Gaming, complete with the initial database and supervisor workers.
