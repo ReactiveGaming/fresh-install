@@ -106,6 +106,10 @@ apt -y upgrade &> /dev/null
 apt -y autoremove &> /dev/null
 apt -y clean &> /dev/null
 
+su ${U} << 'EOF'
+ git config --global --bool pull.rebase true
+EOF
+
 git clone https://github.com/nathanburgess/dotfiles ~/dotfiles && cd ~/dotfiles && ./install.sh && cd && rm -fR ~/dotfiles
 
 mkdir /home/${U}/.config
