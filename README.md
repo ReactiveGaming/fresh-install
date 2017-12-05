@@ -10,6 +10,7 @@ In your terminal, go to that folder and type 'vagrant up'
 git clone https://github.com/ReactiveGaming/fresh-install ~/fresh
 sudo ~/fresh/install.sh
 rm -fR ~/fresh
+npm i -g nodemon yarn laravel-echo-server
 ```
 
 # What does this do?
