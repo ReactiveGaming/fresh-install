@@ -14,7 +14,7 @@ npm i -g nodemon yarn laravel-echo-server
 ```
 
 # What does this do?
-This script will configure a development environment (intended for Ubuntu 16.04) geared toward web development. More specifcally, this creates a machine that's ready to develop for Reactive Gaming, complete with the initial database and supervisor workers.
+This script will configure a development environment (intended for Ubuntu 17.04) geared toward web development. More specifcally, this creates a machine that's ready to develop for Reactive Gaming, complete with the initial database and supervisor workers.
 
 ## Major Features
 Uninstall Apache  
