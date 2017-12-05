@@ -10,30 +10,27 @@ debconf-set-selections <<< "mysql-server mysql-server/root_password_again passwo
 echo -e "\n\r\e[32mRemoving apache\e[0m"
 apt -qq remove apache2 --purge -y 
 
+echo -e "\n\r\e[32mUpdating sources\e[0m"
+add-apt-repository ppa:ondrej/php -y &> /dev/null 
+apt-add-repository ppa:nginx/development -y &> /dev/null
+apt-add-repository ppa:chris-lea/redis-server -y &> /dev/null
+add-apt-repository ppa:webupd8team/java -y &> /dev/null
+echo "deb http://www.apache.org/dist/cassandra/debian 311x main" | tee -a /etc/apt/sources.list.d/cassandra.sources.list
+curl https://www.apache.org/dist/cassandra/KEYS | apt-key add -
+curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash - &> /dev/null
+
 echo -e "\n\r\e[32mUpdating and upgrading packages...\e[0m"
 apt -qq autoremove -y 
 apt -qq update -y 
 apt -qq upgrade -y
 
 echo -e "\n\r\e[32mInstalling first batch of packages...\e[0m"
-
-echo "deb http://www.apache.org/dist/cassandra/debian 311x main" | tee -a /etc/apt/sources.list.d/cassandra.sources.list
-
 apt -qq install -y build-essential dos2unix gcc git libmcrypt4 libpcre3-dev ntp unzip software-properties-common curl make python2.7-dev python-pip re2c supervisor unattended-upgrades whois vim libnotify-bin pv cifs-utils zsh
-
-curl https://www.apache.org/dist/cassandra/KEYS | apt-key add -
-
-echo -e "\n\r\e[32mUpdating sources\e[0m"
-add-apt-repository ppa:ondrej/php -y &> /dev/null 
-apt-add-repository ppa:nginx/development -y &> /dev/null
-apt-add-repository ppa:chris-lea/redis-server -y &> /dev/null
-
-curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash - &> /dev/null
 
 echo -e "\n\r\e[32mInstalling second batch of packages...\e[0m"
 apt -qq install -y nodejs libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++ libsodium-dev redis-server memcached beanstalkd mysql-server-5.7 cassandra
 
-echo -e "\n\r\e[32mInstalling final batch of packages...\e[0m"
+echo -e "\n\r\e[32mInstalling third and final batch of packages...\e[0m"
 apt -qq install -y nginx php7.1 php7.1-cli php7.1-dev php7.1-pgsql php7.1-sqlite3 php7.1-gd php7.1-curl php7.1-memcached php7.1-imap php7.1-mysql php7.1-mbstring php7.1-xml php7.1-zip php7.1-bcmath php7.1-soap php7.1-intl php7.1-readline php7.1-fpm
 
 curl -sS https://getcomposer.org/installer | php
