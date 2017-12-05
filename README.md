@@ -18,14 +18,14 @@ This script will configure a development environment (intended for Ubuntu 16.04)
 
 ## Major Features
 Uninstall Apache  
-Install most packages needed for general compilation purposes
+Install most packages needed for general compilation purposes  
 Install PHP 7.1 (and a bunch of extensions)  
-Install nginx  
+Install nginx 1.13.3  
 Install Python 2.7  
-Install NodeJS, NPM, and Yarn  
+Install NodeJS 9.2 and NPM  
 Install Cairo, Pango, and some other image packages  
 Install Redis, MySQL and Apache Cassandra  
 Install Sodium  
 Install Supervisor  
-Install Memcached and Beanstalkd
+Install Memcached and Beanstalkd  
 Update and Upgrade system
