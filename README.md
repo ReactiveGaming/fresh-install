@@ -1,4 +1,11 @@
-# Installation
+# Setting up a Virtual Machine
+```
+Make sure you have VirtualBox and Vagrant installed
+Put the provided Vagrantfile somewhere on your machine
+In your terminal, go to that folder and type 'vagrant up'
+```
+
+# Installation on Virtual Machine
 ```
 git clone https://github.com/ReactiveGaming/fresh-install ~/fresh
 sudo ~/fresh/install.sh
