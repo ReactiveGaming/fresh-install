@@ -17,7 +17,7 @@ apt-add-repository ppa:chris-lea/redis-server -y &> /dev/null
 add-apt-repository ppa:webupd8team/java -y &> /dev/null
 echo "deb http://www.apache.org/dist/cassandra/debian 311x main" | tee -a /etc/apt/sources.list.d/cassandra.sources.list
 curl https://www.apache.org/dist/cassandra/KEYS | apt-key add -
-curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash - &> /dev/null
+curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash - &> /dev/null
 
 echo -e "\n\r\e[32mUpdating and upgrading packages...\e[0m"
 apt -qq autoremove -y 
